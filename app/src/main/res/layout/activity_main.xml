@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/edit_txt_news"
+        style="@style/MainActivityGeneral"
+        android:autofillHints="@string/autofillhint"
+        android:inputType="textImeMultiLine" />
+
+    <Button
+        android:id="@+id/search_btn"
+        style="@style/MainActivityGeneral"
+        android:background="@drawable/circle"
+        android:text="@string/search_btn_txt"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ListView
+            android:id="@+id/listview"
+            style="@style/MainActivityGeneral"
+            android:divider="#000"
+            android:dividerHeight="1dp"
+            tools:listitem="@layout/list_item" />
+
+        <ImageView
+            android:id="@+id/news"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/huge_margin"
+            android:alpha=".7" />
+
+        <ProgressBar
+            android:id="@+id/progeress_bar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/huge_margin"
+            android:layout_marginRight="@dimen/huge_margin"
+            android:indeterminate="true" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

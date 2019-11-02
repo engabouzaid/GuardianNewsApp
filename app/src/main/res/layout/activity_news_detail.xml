@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/big_margin"
+    tools:context=".NewsDetail">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="@dimen/image_big_size"
+            android:layout_height="@dimen/image_big_size"
+            android:layout_marginStart="@dimen/big_margin"
+            android:layout_marginLeft="@dimen/big_margin"
+            android:contentDescription="@string/news_big_image_hint"
+            android:src="@drawable/news" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/MainTextStyle"
+                android:textStyle="bold"
+                tools:text="News Title" />
+
+            <TextView
+                android:id="@+id/author"
+                style="@style/SecondaryTextStyle"
+                tools:text="News Author" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/date"
+        style="@style/SecondaryTextStyle"
+        android:textStyle="bold"
+        tools:text="publisher date : " />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/big_margin">
+
+        <TextView
+            android:id="@+id/description"
+            style="@style/MainTextStyle"
+            android:autoLink="web"
+            android:textStyle="bold"
+            tools:text="Description" />
+
+    </ScrollView>
+
+</LinearLayout>

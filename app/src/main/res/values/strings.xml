@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">NewsAppUdemey</string>
+    <string name="news_image_hint">News Image</string>
+    <string name="news_big_image_hint">News Big Image</string>
+    <string name="autofillhint">Search News</string>
+    <string name="search_btn_txt">Search</string>
+</resources>

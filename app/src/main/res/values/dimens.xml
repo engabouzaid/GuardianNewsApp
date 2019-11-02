@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="image_size">90dp</dimen>
+    <dimen name="small_margin">5dp</dimen>
+    <dimen name="big_margin">10dp</dimen>
+    <dimen name="small_text">17sp</dimen>
+    <dimen name="big_text">20sp</dimen>
+    <dimen name="image_big_size">180dp</dimen>
+    <dimen name="huge_text">25sp</dimen>
+    <dimen name="medium_text">20sp</dimen>
+    <dimen name="huge_margin">50dp</dimen>
+</resources>
