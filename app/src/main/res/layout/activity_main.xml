@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+
     <EditText
         android:id="@+id/edit_txt_news"
         style="@style/MainActivityGeneral"
@@ -22,7 +23,15 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/empty_list_view_text"
+            style="@style/MainActivityGeneral"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="@string/empty_list_view_text"
+            android:visibility="gone" />
 
         <ListView
             android:id="@+id/listview"
@@ -30,14 +39,6 @@
             android:divider="#000"
             android:dividerHeight="1dp"
             tools:listitem="@layout/list_item" />
-
-        <ImageView
-            android:id="@+id/news"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_margin="@dimen/huge_margin"
-            android:alpha=".7" />
 
         <ProgressBar
             android:id="@+id/progeress_bar"

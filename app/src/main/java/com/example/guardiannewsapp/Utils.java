@@ -192,14 +192,14 @@ public class Utils {
                     title = "Title not Found";
                 }
 
-                //Get News Author.
-                // String to get news author.
-                String author;
-                if (firstitem.has("pillarId")) {
+                //Get News Section Name.
+                // String to get news Section Name.
+                String sectionName;
+                if (firstitem.has("sectionName")) {
 
-                    author = firstitem.getString("pillarId");
+                    sectionName = firstitem.getString("sectionName");
                 } else {
-                    author = "Author not Found";
+                    sectionName = "Section Name not Found";
                 }
 
 
@@ -215,17 +215,31 @@ public class Utils {
 
                 // Get News Description Link.
                 // String to get news webUrl.
-                String description;
+                String webURL;
                 if (firstitem.has("webUrl")) {
 
-                    description = firstitem.getString("webUrl");
+                    webURL = firstitem.getString("webUrl");
                 } else {
-                    description = "Description not Found";
+                    webURL = "WebURL not Found";
+                }
+
+                JSONArray firstitemTags = firstitem.getJSONArray("tags");
+                JSONObject firstitemTags0 = firstitemTags.getJSONObject(0);
+                //Get News Author Name.
+                // String to get news Author Name.
+                String author;
+                if (firstitemTags0.has("firstName") || firstitemTags0.has("lastName")) {
+
+                    String authorFirstName = firstitemTags0.getString("firstName");
+                    String authorLastName = firstitemTags0.getString("lastName");
+                    author = authorFirstName + " " + authorLastName;
+                } else {
+                    author = "Author Name not found";
                 }
 
 
                 // add every object from JSON Response to News ArrayList.
-                news.add(new NewsClass(title, author, description, date));
+                news.add(new NewsClass(title, author, webURL, date, sectionName));
             }
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Problem parsing the News JSON results", e);

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,13 +26,14 @@ import androidx.loader.app.LoaderManager;
 import androidx.loader.content.AsyncTaskLoader;
 import androidx.loader.content.Loader;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<NewsClass>> {
     // Define and Initialize news API String.
-    static String NEWS_API = "https://content.guardianapis.com/search?api-key=fb2fab34-e55f-411f-9892-af1c207c759c";
+    static String NEWS_API;
     // Define news title EditText to search for.
     EditText news_title;
     // Define news search Button to search for.
@@ -41,12 +44,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     ListView listView;
     // Define news news Adapter Object.
     NewsAdapter newsAdapter;
-    // Define news image ImageView .
-    ImageView news;
     // Define news search string to search for.
     String s;
     // Define LoaderManager
     LoaderManager loaderManager;
+    // Define Empty Text TextView.
+    TextView emptyTextView;
 
 
     @Override
@@ -59,11 +62,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         news_title = findViewById(R.id.edit_txt_news);
         search = findViewById(R.id.search_btn);
         listView = findViewById(R.id.listview);
-        news = findViewById(R.id.news);
         progressBar = findViewById(R.id.progeress_bar);
 
         //set progressBar visibility to INVISIBLE .
         progressBar.setVisibility(View.INVISIBLE);
+        emptyTextView = findViewById(R.id.empty_list_view_text);
 
 
         // handle listview items clicks to open NewsDetails Activity to show element details.
@@ -72,22 +75,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 NewsClass currentnews = newsAdapter.getItem(position);
 
-                // get every news element data and store it in variables.
-                String title = currentnews.getNews_title();
-                String author = currentnews.getAuthor_name();
-                String Date = currentnews.getDate();
-                String description = currentnews.getDescription();
+                // get every news element webURL and store it in variables.
 
-                // Make new Intent to open NewsDetails Activity.
-                Intent intent = new Intent(getApplicationContext(), NewsDetail.class);
-                // send every news element data and store it in variables with the Intent.
-                intent.putExtra("title", title);
-                intent.putExtra("author", author);
-                intent.putExtra("date", Date);
-                intent.putExtra("desc", description);
+                String webURL = currentnews.getWebURL();
+                if (!webURL.startsWith("http://") && !webURL.startsWith("https://"))
+                    webURL = "http://" + webURL;
+
+                Toast.makeText(MainActivity.this, "webURL" + webURL, Toast.LENGTH_LONG).show();
+                Log.v("Web URL_________", webURL);
+
+                //Start Intent to open Internet Browser with the News URL.
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webURL));
+                startActivity(browserIntent);
 
 
-                startActivity(intent);
             }
         });
 
@@ -95,6 +96,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (isNetworkConnected()) {
             progressBar.setVisibility(View.VISIBLE);
             Toast.makeText(this, "Fetching News", Toast.LENGTH_SHORT).show();
+
+            //https://content.guardianapis.com/search?show-tags=contributor&api-key=fb2fab34-e55f-411f-9892-af1c207c759c
+            // Enter News Api and store it and give it user search word.
+            Uri.Builder builder = new Uri.Builder();
+            builder.scheme("https")
+                    .authority("content.guardianapis.com")
+                    .appendPath("search")
+                    .appendQueryParameter("show-tags", "contributor")
+                    .appendQueryParameter("api-key", "fb2fab34-e55f-411f-9892-af1c207c759c");
+
+            NEWS_API = builder.build().toString();
 
             // Initialize LoaderManager to fetch News When User searches for a specific News.
             search.setOnClickListener(new View.OnClickListener() {
@@ -109,12 +121,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                         Toast.makeText(getApplicationContext(), "Please Enter News to search for ", Toast.LENGTH_LONG).show();
                     } else {
 
-                        // hide progressBar
-                        news.setVisibility(View.GONE);
-
                         // Enter News Api and store it and give it user search word.
-                        NEWS_API =
-                                "https://content.guardianapis.com/search?q=" + s + "&api-key=fb2fab34-e55f-411f-9892-af1c207c759c";
+                        Uri.Builder builder = new Uri.Builder();
+                        builder.scheme("https")
+                                .authority("content.guardianapis.com")
+                                .appendPath("search")
+                                .appendQueryParameter("show-tags", "contributor")
+                                .appendQueryParameter("q", s)
+                                .appendQueryParameter("api-key", "fb2fab34-e55f-411f-9892-af1c207c759c");
+
+                        NEWS_API = builder.build().toString();
 
 
                         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(
@@ -125,6 +141,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
                         // empty search Box after making search.
                         news_title.setText("");
+
+                        // hide progress Bar.
+                        progressBar.setVisibility(View.INVISIBLE);
                         // Clear Adapter.
                         newsAdapter.clear();
                         // Initialize LoaderManager.
@@ -141,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             // initiate Loader Manager.
             loaderManager.initLoader(1, null, this).forceLoad();
             // hide progress bar.
-            news.setVisibility(View.GONE);
+            //progressBar.setVisibility(View.INVISIBLE);
 
 
         } else {
@@ -164,6 +183,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoadFinished(@NonNull Loader<ArrayList<NewsClass>> loader, ArrayList<NewsClass> data) {
         newsAdapter = new NewsAdapter(getApplicationContext(), 0, data);
         listView.setAdapter(newsAdapter);
+        listView.setEmptyView(emptyTextView);
+        progressBar.setVisibility(View.INVISIBLE);
 
     }
 
@@ -172,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         newsAdapter.clear();
         newsAdapter = new NewsAdapter(getApplicationContext(), 0, (new ArrayList<NewsClass>()));
         listView.setAdapter(newsAdapter);
+
     }
 
     // Function To check Internet Connectivity
@@ -192,7 +214,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         @Override
         public ArrayList<NewsClass> loadInBackground() {
+
             if (NEWS_API == null) {
+
                 return null;
             }
 

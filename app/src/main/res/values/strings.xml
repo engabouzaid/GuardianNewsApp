@@ -4,4 +4,5 @@
     <string name="news_big_image_hint">News Big Image</string>
     <string name="autofillhint">Search News</string>
     <string name="search_btn_txt">Search</string>
+    <string name="empty_list_view_text">There is no News</string>
 </resources>

@@ -44,11 +44,11 @@ public class NewsAdapter extends ArrayAdapter<NewsClass> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         // Define new View and attach give it convertview.
-        View view = convertView;
+        // View view = convertView;
 
         //Check if convertview is null and inflate list_item layout into it.
-        if (view == null) {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.list_item,
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item,
                     parent,
                     false);
         }
@@ -57,16 +57,24 @@ public class NewsAdapter extends ArrayAdapter<NewsClass> {
         NewsClass newsClass = getItem(position);
 
         // declare and define news title TextView.
-        TextView news_title = view.findViewById(R.id.news_title);
+        TextView news_title = convertView.findViewById(R.id.news_title);
         // declare and define news Author TextView.
-        TextView news_author_name = view.findViewById(R.id.news_author_name);
+        TextView news_author_name = convertView.findViewById(R.id.news_author_name);
         // put element title and attach it to its TextView.
         news_title.setText(newsClass.getNews_title());
         // put element author and attach it to its TextView.
-        news_author_name.setText(newsClass.getAuthor_name());
+        news_author_name.setText("Author : " + newsClass.getAuthor_name());
+
+        TextView news_section_name = convertView.findViewById(R.id.news_section_name);
+        // declare and define news Author TextView.
+        TextView news_publish_date = convertView.findViewById(R.id.news_publish_date);
+        // put element title and attach it to its TextView.
+        news_section_name.setText("Section : " + newsClass.getNews_section_name());
+        // put element author and attach it to its TextView.
+        news_publish_date.setText("Published At : " + newsClass.getDate());
 
 
-        return view;
+        return convertView;
     }
 
 }
